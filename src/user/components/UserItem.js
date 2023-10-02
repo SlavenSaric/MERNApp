@@ -19,8 +19,7 @@ const UsersItem = (props) => {
             </h3>
           </div>
         </Link>
-      </Card
-      >
+      </Card>
     </li>
   );
 };
