@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Card from "../../shared/components/UIElements/Card";
 import Button from "../../shared/components/FormElements/Button";
 import Modal from "../../shared/components/UIElements/Modal";
+import { AuthContext } from "../../shared/context/auth-context";
 import "./PlaceItem.css";
 
 const PlaceItem = (props) => {
+  const auth = useContext(AuthContext)
   const [deleteModal, setDeleteModal] = useState(false);
   const werbsearchHandler = () => {
     const dataForUrl = props.title.replace(" ", "+");
@@ -58,8 +60,9 @@ const PlaceItem = (props) => {
             <Button inverse onClick={werbsearchHandler}>
               WEBSEARCH
             </Button>
-            <Button to={`/places/${props.id}`}>EDIT</Button>
-            <Button danger onClick={showDeleteHandler}>DELETE</Button>
+            {}
+            {auth.isLoggedIn && <Button to={`/places/${props.id}`}>EDIT</Button>}
+            {auth.isLoggedIn && <Button danger onClick={showDeleteHandler}>DELETE</Button>}
           </div>
         </Card>
       </li>
