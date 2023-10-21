@@ -9,7 +9,6 @@ import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from "../../shared/util/validators";
-import { DUMMY_PLACES } from "./UserPlaces";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import "./PlaceForm.css";
@@ -77,7 +76,6 @@ const UpdatePlace = () => {
         'Content-Type': 'application/json'
       })
       history.push(`/${auth.userId}/places`)
-      console.log(auth.userId);
     }catch(err){
 
     }

@@ -71,8 +71,8 @@ const PlaceItem = (props) => {
               WEBSEARCH
             </Button>
             {}
-            {auth.isLoggedIn && <Button to={`/places/${props.id}`}>EDIT</Button>}
-            {auth.isLoggedIn && <Button danger onClick={showDeleteHandler}>DELETE</Button>}
+            {auth.userId === props.creatorId && <Button to={`/places/${props.id}`}>EDIT</Button>}
+            {auth.userId === props.creatorId && <Button danger onClick={showDeleteHandler}>DELETE</Button>}
           </div>
         </Card>
       </li>
