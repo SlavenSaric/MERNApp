@@ -4,9 +4,13 @@ import Card from "../../shared/components/UIElements/Card";
 import Button from "../../shared/components/FormElements/Button";
 import Modal from "../../shared/components/UIElements/Modal";
 import { AuthContext } from "../../shared/context/auth-context";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import "./PlaceItem.css";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const PlaceItem = (props) => {
+  const {isLoading, error, sendRequest, clearError} = useHttpClient()
   const auth = useContext(AuthContext)
   const [deleteModal, setDeleteModal] = useState(false);
   const werbsearchHandler = () => {
@@ -23,14 +27,19 @@ const PlaceItem = (props) => {
     setDeleteModal(false);
   };
 
-  const confirmDeleteHandler = () => {
-    console.log("deleting...");
+  const confirmDeleteHandler = async () => {
     setDeleteModal(false)
+    try{
+      await sendRequest(`http://localhost:5000/api/places/${props.id}`, 'DELETE')
+      props.onDelete(props.id)
+    }catch(err){
+
+    }
   };
 
   return (
     <>
-      
+        <ErrorModal error={error} onClear={clearError} />
         <Modal
           show={deleteModal}
           onCancel={cancelDeleteHandler}
@@ -48,6 +57,7 @@ const PlaceItem = (props) => {
       
       <li className="place-item">
         <Card className="place-item__content">
+          {isLoading  && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
             <img src={props.image} alt={props.title} />
           </div>

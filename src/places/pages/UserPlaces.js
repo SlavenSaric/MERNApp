@@ -26,7 +26,7 @@ export const DUMMY_PLACES = [
 ]
 
 const UserPlaces = () => {
-    const [loadedPlaces, setLoadedPlaces] =useState()
+    const [loadedPlaces, setLoadedPlaces] = useState()
     const {isLoading, error,sendRequest,clearError} = useHttpClient()
     const userId = useParams().userId
     
@@ -41,6 +41,18 @@ const UserPlaces = () => {
         }
         fetchPlaces()
     }, [sendRequest, userId])
+
+    const placeDeletedHandler = (deletedPlaceId) => {
+        const fetchPlaces = async () => {
+            try{
+                const responseData = await sendRequest(`http://localhost:5000/api/places/user/${userId}`)
+                setLoadedPlaces(responseData)
+            }catch(err){
+                
+            }
+        }
+        fetchPlaces()
+    }
     
     console.log(loadedPlaces);
 
@@ -49,7 +61,7 @@ const UserPlaces = () => {
     <ErrorModal error={error} onClear={clearError}/>
     {isLoading && <div className="center">
         <LoadingSpinner /></div>}
-    {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+    {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />}
     </>
 }
 
