@@ -34,7 +34,7 @@ const UserPlaces = () => {
         const fetchPlaces = async () => {
             try{
                 const responseData = await sendRequest(`http://localhost:5000/api/places/user/${userId}`)
-                setLoadedPlaces(responseData)
+                setLoadedPlaces(responseData.places)
             }catch(err){
                 
             }
@@ -43,15 +43,7 @@ const UserPlaces = () => {
     }, [sendRequest, userId])
 
     const placeDeletedHandler = (deletedPlaceId) => {
-        const fetchPlaces = async () => {
-            try{
-                const responseData = await sendRequest(`http://localhost:5000/api/places/user/${userId}`)
-                setLoadedPlaces(responseData)
-            }catch(err){
-                
-            }
-        }
-        fetchPlaces()
+        setLoadedPlaces((prevState) => prevState.filter(p => p.id !==deletedPlaceId))
     }
     
     console.log(loadedPlaces);
