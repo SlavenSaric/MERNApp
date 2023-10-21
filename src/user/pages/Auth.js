@@ -4,6 +4,8 @@ import "./Auth.css";
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
 import Card from "../../shared/components/UIElements/Card";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -16,6 +18,8 @@ const Auth = () => {
   const auth = useContext(AuthContext);
 
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -36,7 +40,8 @@ const Auth = () => {
 
     if (isLogin) {
     } else {
-      try{
+      try {
+        setIsLoading(true);
         const response = await fetch("http://localhost:5000/api/users/signup", {
           method: "POST",
           headers: {
@@ -49,15 +54,19 @@ const Auth = () => {
           }),
         });
 
-        const responseData = await response.json()
+        const responseData = await response.json();
+        if(!response.ok){
+          throw new Error(responseData.message)
+        }
         console.log(responseData);
-      }catch(err){
+        auth.login();
+        setIsLoading(false);
+      } catch (err) {
         console.log(err);
+        setIsLoading(false);
+        setError(err.message || "Something went wrong. Please try again.");
       }
-      
     }
-
-    auth.login();
   };
 
   const switchModeHandler = () => {
@@ -84,8 +93,15 @@ const Auth = () => {
     setIsLogin((prev) => !prev);
   };
 
+  const errorHandler = () => {
+    setError(null)
+  }
+
   return (
+    <>
+    <ErrorModal error={error} onClear={errorHandler}/>
     <Card className="authentication padd">
+      {isLoading && <LoadingSpinner asOverlay />}
       <h2>Login Required</h2>
       <hr />
       <form onSubmit={AuthSubmitHandler}>
@@ -126,6 +142,7 @@ const Auth = () => {
         SWITCH TO {isLogin ? "SIGNUP" : "LOGIN"}
       </Button>
     </Card>
+    </>
   );
 };
 
