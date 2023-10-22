@@ -14,6 +14,7 @@ import {
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
 import { AuthContext } from "../../shared/context/auth-context";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -121,6 +122,7 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
+          {!isLogin && <ImageUpload center id="image" />}
           <Input
             id="email"
             element="input"
